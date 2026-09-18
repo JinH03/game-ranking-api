@@ -11,5 +11,6 @@
   ```
   @app.get("/score")
   def score():
+    return .....
   ```
 - 위 코드는 /scores로 GET요청이 들어오면 scores() 함수를 실행한다.
