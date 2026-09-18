@@ -8,6 +8,7 @@
 
 ### 오늘 핵심 개념
 - FastAPI에서 배운 @app.get()을 이용해 URL과 파이썬 함수를 연결할 수 있다.
-  @app.get("/score")
+  ```@app.get("/score")
   def score():
+  ```
 - 위 코드는 /scores로 GET요청이 들어오면 scores() 함수를 실행한다.
