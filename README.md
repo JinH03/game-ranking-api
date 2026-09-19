@@ -50,7 +50,7 @@ def get_score(player_name):
 - `DELETE /scores/{player_name}` → 플레이어 삭제
 
 ### 검증 조건
-- - 이름은 최소 2글자
+- 이름은 최소 2글자
 - rating은 0 이상
 - limit은 1~5
 - 존재하지 않는 플레이어 → 404
