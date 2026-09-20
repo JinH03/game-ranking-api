@@ -56,3 +56,48 @@ def get_score(player_name):
 - 존재하지 않는 플레이어 → 404
 - 중복 플레이어 → 409
 - 잘못된 입력 → 422
+
+## Day 4 - 구조 분리 및 db 설치 및 이용
+
+### 배운내용
+- Router를 이용한 API 코드 분리
+- schemas 폴더를 만들어 pydantic chema 분리
+- main.py에서 router 연결
+- API 기능별 파일 분리
+- FASTAPI 프로젝트 구조 정리
+- SQLAlchemy 설치 및 사용
+- SQLite 데이터베이스 연결
+- Database Engine 생성
+- Session 구성
+- SQLAlchemy Model 생성
+- Dependency를 이용한 DB Session 관리
+- 기존 메모리 리스트에서 데이터베이스 방식으로 변경
+- CRUD API를 데이터베이스와 연결
+  
+### 프로젝트 구조
+
+```text
+game-ranking-api/
+├── main.py
+├── routers/
+│   └── scores.py
+├── schemas/
+│   └── score.py
+├── data/
+│   └── scores.py
+├── database.py
+├── models.py
+└── README.md
+
+### 데이터베이스 구조
+
+SQLite를 사용하여 `scores.db` 데이터베이스를 생성했다.
+
+```text
+FastAPI
+   ↓
+SQLAlchemy
+   ↓
+SQLite
+   ↓
+scores.db
