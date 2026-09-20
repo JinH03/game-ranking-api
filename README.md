@@ -88,6 +88,7 @@ game-ranking-api/
 ├── database.py
 ├── models.py
 └── README.md
+```
 
 ### 데이터베이스 구조
 
@@ -101,3 +102,4 @@ SQLAlchemy
 SQLite
    ↓
 scores.db
+```
