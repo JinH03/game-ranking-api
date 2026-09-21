@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Query, HTTPException, Depends
 from sqlalchemy.orm import Session
 
-from database import SessionLocal
+from database import SessionLocal, get_db
 from models import Score as ScoreModel
-from schemas.score import Score, Score_update
+from schemas.score import Score, Score_update, ScoreResponse
 
 router = APIRouter()
 def get_db():
@@ -13,12 +13,12 @@ def get_db():
     finally:
         db.close()
 
-@router.get("/scores")
+@router.get("/scores", response_model=list[ScoreResponse])
 def scores(limit: int = Query(5, ge=1, le=5), db: Session = Depends(get_db)):
     return db.query(ScoreModel).limit(limit).all()
 
 
-@router.post("/scores")
+@router.post("/scores", response_model=ScoreResponse)
 def create_score(score: Score, db: Session = Depends(get_db)):
     existing_score = (db.query(ScoreModel).filter(ScoreModel.name == score.name).first())
     if existing_score:
@@ -31,7 +31,7 @@ def create_score(score: Score, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(new_score)
     return new_score
-@router.put("/scores/{player_name}")
+@router.put("/scores/{player_name}", response_model=ScoreResponse)
 def update_score(data: Score_update, player_name: str,db: Session = Depends(get_db)):
     player = (
         db.query(ScoreModel)
@@ -45,7 +45,7 @@ def update_score(data: Score_update, player_name: str,db: Session = Depends(get_
     db.refresh(player)
     return player
 
-@router.delete("/scores/{player_name}")
+@router.delete("/scores/{player_name}",response_model=ScoreResponse)
 def delete_score(player_name:str, db: Session = Depends(get_db)):
     player = (
             db.query(ScoreModel)

@@ -8,3 +8,11 @@ class Score(BaseModel):
 class Score_update(BaseModel):
     rating: int = Field(ge=0)
 
+
+class ScoreResponse(BaseModel):
+    id: int
+    name: str
+    rating: int
+
+    class Config:
+        from_attributes = True
