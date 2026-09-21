@@ -103,3 +103,29 @@ SQLite
    ↓
 scores.db
 ```
+
+
+## Day 5 - Request / Response Schema & response_model
+
+### 배운내용
+- Request Schema와 Response Schema의 차이
+- Pydantic Response Schema 작성
+- FastAPI `response_model` 사용
+- SQLAlchemy Model과 Pydantic Schema의 역할 분리
+- `from_attributes = True` 사용
+- API 요청 데이터와 응답 데이터 분리
+
+
+```text
+Score
+→ 내가 받는 데이터
+
+Score_update
+→ 수정할 때 받는 데이터
+
+ScoreResponse
+→ 내가 돌려주는 데이터
+
+ScoreModel
+→ DB에 저장되는 데이터
+```
