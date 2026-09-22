@@ -129,3 +129,25 @@ ScoreResponse
 ScoreModel
 → DB에 저장되는 데이터
 ```
+
+
+## Day 6 - 프로젝트 구조 개선 & 환경변수 & serivces 레이어
+
+### 배운 내용
+- `.env` 환경변수 관리
+- `python-dotenv` 사용
+- `.gitignore`를 이용한 `.env` 관리
+- `.env.example` 작성
+- 반복되는 코드 공통 함수로 분리
+- Router와 DB 로직 분리
+- Service Layer 구조 이해
+- CRUD 로직을 Service로 이동
+- 프로젝트 구조 개선
+
+### 1. 환경변수 관리
+
+기존에는 데이터베이스 주소를 코드에 직접 작성했다.
+
+```python
+DATABASE_URL = "sqlite:///./scores.db"
+```
