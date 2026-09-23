@@ -1,18 +1,30 @@
 from fastapi import APIRouter, Query, HTTPException, Depends
 from sqlalchemy.orm import Session
-from services.scores import get_scores, create_score, update_score, delete_score
+
 from database import get_db
 from models import Score as ScoreModel
-from schemas.score import Score, Score_update, ScoreResponse
-
+from schemas.score import Score, Score_update, ScoreResponse, ScoreListResponse
+from services.scores import get_scores, create_score, update_score, delete_score
 router = APIRouter()
-@router.get("/scores", response_model=list[ScoreResponse])
-def scores(limit: int = Query(5, ge=1, le=5), db: Session = Depends(get_db)):
-    return get_scores(limit, db)
-
-
+@router.get("/scores", response_model=ScoreListResponse)
+def scores(
+    page: int = Query(1, ge=1),
+    limit: int = Query(5, ge=1, le=5),
+    db: Session = Depends(get_db),
+    min_rating: int | None = Query(None, ge=0),
+    sort: str | None = Query("rating", pattern="^(rating)$"),
+    order: str = Query("desc", pattern="^(asc|desc)$")
+):
+    return get_scores(
+        page,
+        limit,
+        db,
+        min_rating,
+        sort,
+        order
+    )
 @router.post("/scores", response_model=ScoreResponse)
-def create_score_endpoint(
+def create_score_endpoint( 
     score: Score,
     db: Session = Depends(get_db)
 ):

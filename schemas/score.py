@@ -16,3 +16,9 @@ class ScoreResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+class ScoreListResponse(BaseModel):
+    items: list[ScoreResponse]
+    page: int
+    limit: int
+    total: int

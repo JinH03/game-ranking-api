@@ -151,3 +151,37 @@ ScoreModel
 ```python
 DATABASE_URL = "sqlite:///./scores.db"
 ```
+
+
+## Day 7 - Serivce Layer 개선 & 페이지네이션 & 검색/정렬 기능
+
+### 배운내용
+
+- Router와 Service Layer의 역할 분리
+- CRUD 데이터베이스 로직을 Service Layer에서 관리
+- 공통 플레이어 조회 로직 분리
+- 페이지네이션(Pagination) 구현
+- `page`, `limit`, `offset` 개념 이해
+- 최소 rating 필터링 기능 구현
+- rating 기준 정렬 기능 구현
+- Query Parameter 검증
+- API 테스트 및 에러 디버깅
+- FastAPI의 422 / 404 / 409 / 500 에러 원인 확인
+- SQLAlchemy Query를 이용한 데이터 조회 및 정렬
+
+
+
+### 1. Service Layer 구조 개선
+
+기존에는 Router에서 DB 조회와 수정 로직을 직접 처리했지만,
+CRUD 로직을 `services/scores.py`로 이동했다.
+
+```text
+Router
+  ↓
+Service
+  ↓
+SQLAlchemy
+  ↓
+SQLite
+```
