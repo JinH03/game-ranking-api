@@ -6,6 +6,7 @@ from models import Score as ScoreModel
 from schemas.score import Score, Score_update, ScoreResponse, ScoreListResponse
 from services.scores import get_scores, create_score, update_score, delete_score
 router = APIRouter()
+
 @router.get("/scores", response_model=ScoreListResponse)
 def scores(
     page: int = Query(1, ge=1),
@@ -13,7 +14,8 @@ def scores(
     db: Session = Depends(get_db),
     min_rating: int | None = Query(None, ge=0),
     sort: str | None = Query("rating", pattern="^(rating)$"),
-    order: str = Query("desc", pattern="^(asc|desc)$")
+    order: str = Query("desc", pattern="^(asc|desc)$"),
+    name: str | None = Query(None)
 ):
     return get_scores(
         page,
@@ -21,7 +23,8 @@ def scores(
         db,
         min_rating,
         sort,
-        order
+        order,
+        name
     )
 @router.post("/scores", response_model=ScoreResponse)
 def create_score_endpoint( 

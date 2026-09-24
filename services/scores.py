@@ -1,28 +1,35 @@
 from sqlalchemy.orm import Session
 from models import Score as ScoreModel
 
-
 def get_scores(
-        page:int, 
-        limit: int, 
-        db: Session, 
-        min_rating: int | None = None, 
-        sort: str | None = None,
-        order: str = "desc"
-    ):
+    page: int,
+    limit: int,
+    db: Session,
+    min_rating: int | None = None,
+    sort: str | None = None,
+    order: str = "desc",
+    name: str | None = None
+):
     query = db.query(ScoreModel)
+
     if min_rating is not None:
         query = query.filter(ScoreModel.rating >= min_rating)
-    if sort == "rating":
-        query = query.order_by(ScoreModel.rating.desc())
-    total = query.count()
-    offset = (page - 1) * limit
-    items = query.offset(offset).limit(limit).all()
+
     if sort == "rating":
         if order == "desc":
             query = query.order_by(ScoreModel.rating.desc())
         else:
             query = query.order_by(ScoreModel.rating.asc())
+    if name is not None:
+        query = query.filter(
+        ScoreModel.name.contains(name)
+    )
+    total = query.count()
+
+    offset = (page - 1) * limit
+
+    items = query.offset(offset).limit(limit).all()
+
     return {
         "items": items,
         "page": page,

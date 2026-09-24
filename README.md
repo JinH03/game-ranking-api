@@ -185,3 +185,46 @@ SQLAlchemy
   ↓
 SQLite
 ```
+
+
+## Day 8 - pytest & FastAPI API 테스트
+
+### 배운 내용
+- pytest 설치 및 사용
+- 'python -m pytest'를 통한 테스트 실행
+- Fast API 'TestClient' 사용
+- API 엔드포인트 자동 테스트
+- CRUD API 테스트 작성
+- 정상적인 API 및 잘못된 요청에 대한 테스트 작성
+- 테스트 용 SQLite DB 분리
+- pytest fixture 사용
+- 테스트마다 DB 생성 및 정리
+- 실제 개발용 DB와 테스트용 분리
+
+
+### 테스트 구조
+```text
+game-ranking-api/
+├── main.py
+├── database.py
+├── models.py
+├── routers/
+├── services/
+├── schemas/
+└── tests/
+    ├── conftest.py
+    └── test_score.py
+```
+
+### 테스트 결과
+```
+GET /scores                  PASSED
+POST /scores                 PASSED
+PUT /scores/{player_name}    PASSED
+DELETE /scores/{player_name} PASSED
+UPDATE not found             PASSED
+DELETE not found             PASSED
+CREATE duplicate             PASSED
+INVALID rating               PASSED
+INVALID limit                PASSED
+```
