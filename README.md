@@ -228,3 +228,17 @@ CREATE duplicate             PASSED
 INVALID rating               PASSED
 INVALID limit                PASSED
 ```
+
+
+## Day 9 - 코드 품질 개선 및 테스트 추가
+
+### 배운내용 
+
+- Pagination API 테스트
+- page, limit 동작 테스트
+- min_rating 필터 테스트
+- name 검색 테스트
+- rating 내림차순 정렬 테스트
+- rating 오름차순 정렬 테스트
+- 기존 API 기능을 테스트 코드로 검증
+- 전체 테스트를 pytest -v로 실행

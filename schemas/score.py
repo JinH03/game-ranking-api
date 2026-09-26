@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 
 class Score(BaseModel):
     name : str = Field(min_length=2)
@@ -10,12 +10,12 @@ class Score_update(BaseModel):
 
 
 class ScoreResponse(BaseModel):
+    model_config=ConfigDict(from_attributes=True)
     id: int
     name: str
     rating: int
 
-    class Config:
-        from_attributes = True
+    
 
 class ScoreListResponse(BaseModel):
     items: list[ScoreResponse]
