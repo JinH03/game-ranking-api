@@ -22,3 +22,6 @@ class ScoreListResponse(BaseModel):
     page: int
     limit: int
     total: int
+
+
+    

@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 
 from database import get_db
 from schemas.score import Score, Score_update, ScoreResponse, ScoreListResponse
+
 from services.scores import (
     get_scores,
     create_score,

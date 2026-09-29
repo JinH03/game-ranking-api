@@ -242,3 +242,125 @@ INVALID limit                PASSED
 - rating 오름차순 정렬 테스트
 - 기존 API 기능을 테스트 코드로 검증
 - 전체 테스트를 pytest -v로 실행
+
+## Day 10 - 사용자 인증 기초 & 비번 해싱
+
+### 배운내용
+
+- 사용자 모델 추가
+- 사용자 회원가입 API 구현
+- 사용자 Request / Response Schema 작성
+- Service레이어에 유저 관련 로직 분리
+- 비번 평문으로 저장 X
+- 'passlib'을 통한 비번 해싱
+- 'bcrypt'를 이용한 비번 암호화
+- 회원가입 과정에서 발생한 라이브러리 및 고드 오류 디버깅
+
+### 사용자 회원가입 흐름
+
+```text
+POST /users
+     ↓
+Router
+     ↓
+User Service
+     ↓
+비밀번호 해싱
+     ↓
+UserModel 생성
+     ↓
+SQLAlchemy Session
+     ↓
+SQLite
+```
+
+## Day 11 - JWT 인증 & 로그인 인증
+
+### 배운내용
+- JWT의 기본 개념 학습
+- JWT access token 발급
+- '.env'에서 'SECRET_KEY' 발급
+- 'OAuth2passwordBearer' 사용
+- 인증이 필요한 `/me` API 구현
+- `get_current_user()` 인증 Dependency 구현
+
+**### JWT 인증 흐름**
+
+```text
+POST /login
+     ↓
+username + password
+     ↓
+User Service
+     ↓
+비밀번호 검증
+     ↓
+JWT Access Token 발급
+     ↓
+Authorization: Bearer <token>
+     ↓
+OAuth2PasswordBearer
+     ↓
+get_current_user()
+     ↓
+JWT 검증
+     ↓
+/me 접근
+```
+
+### JWT 구조
+
+JWT는 다음과 같은 구조로 이루어진다.
+
+```text
+Header.Payload.Signature
+```
+
+Token의 `sub`에 로그인한 사용자의 username을 저장한다.
+
+```python
+access_token = create_access_token(
+    {"sub": user.username}
+)
+```
+
+JWT에는 만료 시간도 설정한다.
+
+```python
+expire = datetime.now(timezone.utc) + timedelta(
+    minutes=ACCESS_TOKEN_EXPIRE_MINUTES
+)
+```
+
+현재 Access Token의 기본 만료 시간은 30분이다.
+
+### 인증 Dependency
+
+`OAuth2PasswordBearer`를 이용해 요청의 Bearer Token을 가져온다.
+
+```python
+oauth2_scheme = OAuth2PasswordBearer(
+    tokenUrl="/login"
+)
+```
+
+`get_current_user()`에서는 Token을 검증하고
+JWT의 `sub`에서 username을 가져온다.
+
+```text
+Token
+ ↓
+decode_access_token()
+ ↓
+payload
+ ↓
+sub
+ ↓
+username
+```
+
+### 구현 API
+
+- `POST /login` → 로그인 및 JWT Access Token 발급
+- `GET /me` → JWT 인증 후 현재 사용자 조회
+
