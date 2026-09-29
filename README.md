@@ -284,7 +284,7 @@ SQLite
 - 인증이 필요한 `/me` API 구현
 - `get_current_user()` 인증 Dependency 구현
 
-**### JWT 인증 흐름**
+### JWT 인증 흐름
 
 ```text
 POST /login
