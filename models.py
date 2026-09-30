@@ -7,6 +7,7 @@ class Score(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, unique=True, nullable=False)
     rating = Column(Integer, nullable=False)
+    user_id = Column(Integer, nullable=True)
 
 class User(Base):
     __tablename__ = "users"

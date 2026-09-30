@@ -364,3 +364,52 @@ username
 - `POST /login` → 로그인 및 JWT Access Token 발급
 - `GET /me` → JWT 인증 후 현재 사용자 조회
 
+## Day 12 - Alembic & 사용자별 데이터 권한관리
+
+### 배운내용
+- Alembic 설치 및 초기 설정
+- SQLAlchemy Model 변경 사항을 migration으로 관리
+- 로그인한 사용자의 ID를 score에 저장
+- 사용자별 데이터 소유권 구현
+- 자신의 점수만 수정 및 삭제할 수 있도록 권한 처리
+- 다른 사용자의 점수 수정 및 삭제 차단
+- Authentication, Authorization의 차이 이해
+
+### Migration 상태 확인
+
+Model과 Migration 상태가 일치하는지 확인을 위해 명령어 사용
+```
+alembic check
+```
+
+### 사용자별 데이터 소유권
+점수를 생성할 때 현재 로그인한 사용자의 ID를
+Score의 user_id에 저장하도록 변경했다.
+```
+로그인 사용자
+    ↓
+current_user.id
+    ↓
+Score.user_id
+```
+이제 Score와 User를 연결하여
+각 사용자의 데이터를 구분할 수 있다.
+
+### 사용자별 수정 및 삭제 권한
+점수를 수정하거나 삭제할 때
+현재 로그인한 사용자의 ID와 Score의 user_id를 비교하도록 구현했다.
+```
+현재 로그인 사용자
+        ↓
+current_user.id
+        ↓
+Score.user_id 비교
+        ↓
+   ┌────┴────┐
+   ↓         ↓
+  일치      불일치
+   ↓         ↓
+수정/삭제   차단
+```
+실제로 다른 계정으로 로그인하여
+다른 사용자의 점수를 수정하거나 삭제할 수 없는 것을 확인했다.

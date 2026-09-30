@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Query, HTTPException, Depends
 from sqlalchemy.orm import Session
-
+from routers.users import get_current_user
 from database import get_db
 from schemas.score import Score, Score_update, ScoreResponse, ScoreListResponse
-
+from models import User
 from services.scores import (
     get_scores,
     create_score,
@@ -12,7 +12,6 @@ from services.scores import (
 )
 
 router = APIRouter()
-
 
 @router.get(
     "/scores",
@@ -74,11 +73,13 @@ def scores(
 def create_score_endpoint(
     score: Score,
     db: Session = Depends(get_db),
+    current_user: str = Depends(get_current_user)
 ):
     new_score = create_score(
         score.name,
         score.rating,
         db,
+        current_user.id,
     )
 
     if new_score is None:
@@ -100,11 +101,13 @@ def update_score_endpoint(
     data: Score_update,
     player_name: str,
     db: Session = Depends(get_db),
+    current_user: str = Depends(get_current_user)
 ):
     player = update_score(
         player_name,
         data.rating,
         db,
+        current_user.id
     )
 
     if player is None:
@@ -122,19 +125,23 @@ def update_score_endpoint(
     summary="플레이어 삭제",
     description="특정 플레이어의 점수를 삭제합니다.",
 )
+
+
 def delete_score_endpoint(
     player_name: str,
     db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
 ):
     player = delete_score(
         player_name,
         db,
+        current_user.id
     )
 
     if player is None:
         raise HTTPException(
             status_code=404,
-            detail="Player not found",
+            detail="Player not found"
         )
 
-    return player 
+    return player

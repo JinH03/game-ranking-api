@@ -6,7 +6,7 @@ from services.auth import create_access_token, decode_access_token
 from database import get_db
 from schemas.user import UserCreate, UserResponse, Token
 from services.users import create_user, login_user
-
+from models import User
 
 router = APIRouter()
 
@@ -14,7 +14,8 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login")
 
 
 def get_current_user(
-    token: str = Depends(oauth2_scheme)
+    token: str = Depends(oauth2_scheme),
+    db: Session = Depends(get_db)
 ):
     payload = decode_access_token(token)
 
@@ -32,9 +33,17 @@ def get_current_user(
             detail="Invalid token"
         )
 
-    return username
+    user = db.query(User).filter(
+        User.username == username
+    ).first()
 
+    if user is None:
+        raise HTTPException(
+            status_code=401,
+            detail="User not found"
+        )
 
+    return user
 @router.post(
     "/users",
     response_model=UserResponse,
@@ -85,11 +94,10 @@ def login(
         "token_type": "bearer"
     }
 
-
 @router.get("/me")
 def get_me(
-    current_user: str = Depends(get_current_user)
+    current_user: User = Depends(get_current_user)
 ):
     return {
-        "username": current_user
+        "username": current_user.username
     }

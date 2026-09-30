@@ -37,7 +37,7 @@ def get_scores(
         "total": total
     }
 
-def create_score(name: str, rating: int, db: Session):
+def create_score(name: str, rating: int, db: Session, user_id: int):
     existing_score = (
         db.query(ScoreModel)
         .filter(ScoreModel.name == name)
@@ -49,7 +49,8 @@ def create_score(name: str, rating: int, db: Session):
 
     new_score = ScoreModel(
         name=name,
-        rating=rating
+        rating=rating,
+        user_id=user_id
     )
 
     db.add(new_score)
@@ -59,10 +60,18 @@ def create_score(name: str, rating: int, db: Session):
     return new_score
 
 
-def update_score(player_name: str, rating: int, db: Session):
+def update_score(
+    player_name: str,
+    rating: int,
+    db: Session,
+    user_id: int
+):
     player = (
         db.query(ScoreModel)
-        .filter(ScoreModel.name == player_name)
+        .filter(
+            ScoreModel.name == player_name,
+            ScoreModel.user_id == user_id
+        )
         .first()
     )
 
@@ -77,10 +86,17 @@ def update_score(player_name: str, rating: int, db: Session):
     return player
 
 
-def delete_score(player_name: str, db: Session):
+def delete_score(
+    player_name: str,
+    db: Session,
+    user_id: int
+):
     player = (
         db.query(ScoreModel)
-        .filter(ScoreModel.name == player_name)
+        .filter(
+            ScoreModel.name == player_name,
+            ScoreModel.user_id == user_id
+        )
         .first()
     )
 
